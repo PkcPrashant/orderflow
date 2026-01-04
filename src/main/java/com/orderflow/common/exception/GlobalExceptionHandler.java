@@ -2,10 +2,9 @@ package com.orderflow.common.exception;
 
 import com.orderflow.common.api.ApiError;
 import com.orderflow.common.api.ValidationErrorResponse;
-import com.orderflow.modules.orders.exception.DuplicateOrderNoException;
-import com.orderflow.modules.orders.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -38,13 +37,31 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(DuplicateOrderNoException.class)
-    public ApiError handleDuplicateOrderException(
-            DuplicateOrderNoException ex,
+    @ExceptionHandler(BadCredentialsException.class)
+    public ApiError handleAuthenticationException(
+            BadCredentialsException ex,
             HttpServletRequest request
     ) {
         String message = (ex.getMessage() == null || ex.getMessage().isBlank())
-                ? "Order no already exists"
+                ? "Invalid Credentials!!!"
+                : ex.getMessage();
+
+        return new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(),
+                HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                message,
+                request.getRequestURI()
+        );
+    }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ApiError handleDuplicateOrderException(
+            DuplicateResourceException ex,
+            HttpServletRequest request
+    ) {
+        String message = (ex.getMessage() == null || ex.getMessage().isBlank())
+                ? "Resource already exists"
                 : ex.getMessage();
 
         return new ApiError(
@@ -62,7 +79,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request
     ) {
         String message = (ex.getMessage() == null || ex.getMessage().isBlank())
-                ? "Order not found"
+                ? "Resource not found"
                 : ex.getMessage();
 
         return new ApiError(

@@ -15,13 +15,13 @@ public class Order {
     private String orderNo;
 
     @Column(nullable = false)
-    private LocalDateTime createdTime;
+    private LocalDateTime createdAt;
 
     protected Order() {}
 
     public Order(String orderNo) {
         this.orderNo = orderNo;
-        this.createdTime = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     public int getId() {
@@ -33,6 +33,6 @@ public class Order {
     }
 
     public LocalDateTime getCreatedTime() {
-        return createdTime;
+        return createdAt;
     }
 }

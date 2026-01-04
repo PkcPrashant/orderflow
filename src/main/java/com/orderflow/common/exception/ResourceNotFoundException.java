@@ -1,7 +1,6 @@
-package com.orderflow.modules.orders.exception;
+package com.orderflow.common.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
-
     public ResourceNotFoundException(String message) {
         super(message);
     }

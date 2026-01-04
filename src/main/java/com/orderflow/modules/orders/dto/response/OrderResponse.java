@@ -4,5 +4,5 @@ import java.time.LocalDateTime;
 
 public record OrderResponse(
         String orderNo,
-        LocalDateTime createdTime
+        LocalDateTime createdAt
 ){}

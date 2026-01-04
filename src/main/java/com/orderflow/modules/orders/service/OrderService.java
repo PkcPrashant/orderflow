@@ -2,10 +2,9 @@ package com.orderflow.modules.orders.service;
 
 import com.orderflow.modules.orders.dto.request.OrderRequest;
 import com.orderflow.modules.orders.entity.Order;
-import com.orderflow.modules.orders.exception.DuplicateOrderNoException;
-import com.orderflow.modules.orders.exception.ResourceNotFoundException;
+import com.orderflow.common.exception.DuplicateResourceException;
+import com.orderflow.common.exception.ResourceNotFoundException;
 import com.orderflow.modules.orders.repo.OrderRepo;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +21,7 @@ public class OrderService {
     public Order createOrder(OrderRequest orderRequest) {
         String orderNo = orderRequest.orderNo();
         if (orderRepo.existsByOrderNo(orderNo)) {
-            throw new DuplicateOrderNoException("Order no already exists");
+            throw new DuplicateResourceException("Order no already exists");
         } else {
             return orderRepo.save(new Order(orderNo));
         }
