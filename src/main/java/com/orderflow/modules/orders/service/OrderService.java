@@ -5,6 +5,7 @@ import com.orderflow.modules.orders.entity.Order;
 import com.orderflow.modules.orders.repo.OrderRepo;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -17,10 +18,13 @@ public class OrderService {
         this.orderRepo = orderRepo;
     }
 
-    public Order saveOrder(@Valid OrderRequest orderRequest) {
-        Order order = new Order();
-        order.setOrderNo(orderRequest.orderNo());
-        order.setCreatedTime(LocalDateTime.now());
-        return orderRepo.save(order);
+    @Transactional
+    public Order createOrder(OrderRequest orderRequest) {
+        String orderNo = orderRequest.orderNo();
+        if (orderRepo.existsByOrderNo(orderNo)) {
+            throw new IllegalArgumentException("Order no already exists");
+        } else {
+            return orderRepo.save(new Order(orderNo));
+        }
     }
 }

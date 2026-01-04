@@ -6,11 +6,7 @@ import com.orderflow.modules.orders.entity.Order;
 import com.orderflow.modules.orders.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -22,11 +18,11 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<OrderResponse> placeOrder(@Valid @RequestBody OrderRequest orderRequest) {
-        Order order = orderService.saveOrder(orderRequest);
-        OrderResponse orderResponse = new OrderResponse(order.getOrderNo(), order.getCreatedTime());
-        return new ResponseEntity<>(orderResponse, HttpStatus.CREATED);
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public OrderResponse placeOrder(@Valid @RequestBody OrderRequest orderRequest) {
+        Order order = orderService.createOrder(orderRequest);
+        return new OrderResponse(order.getOrderNo(), order.getCreatedTime());
     }
 
 }

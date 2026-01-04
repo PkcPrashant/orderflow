@@ -1,25 +1,27 @@
 package com.orderflow.modules.orders.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-@Entity (name = "orders")
+@Entity
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
+
+    @Column(nullable = false, unique = true, length = 40)
     private String orderNo;
+
+    @Column(nullable = false)
     private LocalDateTime createdTime;
 
-    public Order() {}
+    protected Order() {}
 
-    public Order(String orderNo, LocalDateTime createdTime) {
+    public Order(String orderNo) {
         this.orderNo = orderNo;
-        this.createdTime = createdTime;
+        this.createdTime = LocalDateTime.now();
     }
 
     public int getId() {
@@ -30,15 +32,7 @@ public class Order {
         return orderNo;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
-    }
-
     public LocalDateTime getCreatedTime() {
         return createdTime;
-    }
-
-    public void setCreatedTime(LocalDateTime createdTime) {
-        this.createdTime = createdTime;
     }
 }
