@@ -25,4 +25,18 @@ public class OrderController {
         return new OrderResponse(order.getOrderNo(), order.getCreatedTime());
     }
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public OrderResponse findOrderById(@Valid @PathVariable Integer id) {
+        Order order = orderService.findOrderById(id);
+        return new OrderResponse(order.getOrderNo(), order.getCreatedTime());
+    }
+
+    @GetMapping("")
+    @ResponseStatus(HttpStatus.OK)
+    public OrderResponse findOrderByOrderNo(@Valid @RequestParam String orderNo) {
+        Order order = orderService.findByOrderNo(orderNo);
+        return new OrderResponse(order.getOrderNo(), order.getCreatedTime());
+    }
+
 }

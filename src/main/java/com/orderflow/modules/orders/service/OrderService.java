@@ -3,11 +3,11 @@ package com.orderflow.modules.orders.service;
 import com.orderflow.modules.orders.dto.request.OrderRequest;
 import com.orderflow.modules.orders.entity.Order;
 import com.orderflow.modules.orders.exception.DuplicateOrderNoException;
+import com.orderflow.modules.orders.exception.ResourceNotFoundException;
 import com.orderflow.modules.orders.repo.OrderRepo;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 public class OrderService {
@@ -26,5 +26,20 @@ public class OrderService {
         } else {
             return orderRepo.save(new Order(orderNo));
         }
+    }
+
+    public Order findOrderById(Integer id) {
+        return orderRepo.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Order not found for id: " + id)
+                );
+    }
+
+    public Order findByOrderNo(String orderNo) {
+        return orderRepo.findByOrderNo(orderNo)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Order not found for orderNo: " + orderNo)
+                );
+
     }
 }

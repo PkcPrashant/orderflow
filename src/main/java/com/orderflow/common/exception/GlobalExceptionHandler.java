@@ -3,6 +3,7 @@ package com.orderflow.common.exception;
 import com.orderflow.common.api.ApiError;
 import com.orderflow.common.api.ValidationErrorResponse;
 import com.orderflow.modules.orders.exception.DuplicateOrderNoException;
+import com.orderflow.modules.orders.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -42,11 +43,33 @@ public class GlobalExceptionHandler {
             DuplicateOrderNoException ex,
             HttpServletRequest request
     ) {
+        String message = (ex.getMessage() == null || ex.getMessage().isBlank())
+                ? "Order no already exists"
+                : ex.getMessage();
+
         return new ApiError(
                 LocalDateTime.now(),
                 HttpStatus.CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(),
-                "Order no already exists",
+                message,
+                request.getRequestURI()
+        );
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ApiError handleOrderNotFoundException(
+            ResourceNotFoundException ex,
+            HttpServletRequest request
+    ) {
+        String message = (ex.getMessage() == null || ex.getMessage().isBlank())
+                ? "Order not found"
+                : ex.getMessage();
+
+        return new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                message,
                 request.getRequestURI()
         );
     }
