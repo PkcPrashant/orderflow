@@ -1,12 +1,12 @@
 package com.orderflow.modules.auth.entity;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -25,10 +25,10 @@ public class User {
 
     protected User() {}
 
-    public User(String email, String passwordHash, String role) {
+    public User(String email, String passwordHash) {
         this.email = email;
         this.passwordHash = passwordHash;
-        this.role = role;
+        this.role = "USER";
     }
 
     @PrePersist
@@ -36,8 +36,11 @@ public class User {
         this.createdAt = LocalDateTime.now();
     }
 
+    public Integer getId() { return id; }
     public String getEmail() { return email; }
     public String getPasswordHash() { return passwordHash; }
     public String getRole() { return role; }
     public LocalDateTime getCreatedAt() { return createdAt; }
+
+    public void setRole(String role) { this.role = role; }
 }

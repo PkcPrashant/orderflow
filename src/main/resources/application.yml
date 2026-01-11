@@ -12,6 +12,11 @@ spring:
       hibernate:
         dialect: 'org.hibernate.dialect.MySQLDialect'
 
+security:
+  jwt:
+    secret: 'this_is_a_random_secret_string_copied_again_to_increase_length_this_is_a_random_secret_string'
+    expMinutes: 60
+
 #Dev Only
 management:
   endpoints:
